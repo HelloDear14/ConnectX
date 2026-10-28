@@ -1,0 +1,43 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: messaging-service
+
+  datasource:
+    url: ${NEON_JDBC_URL:jdbc:postgresql://localhost:5432/connectx_messaging}
+    username: ${NEON_DB_USERNAME:connectx}
+    password: ${NEON_DB_PASSWORD:connectx}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+
+jwt:
+  secret: ${JWT_SECRET:connectx-super-secret-key-minimum-32-chars!!}
+  access-token-expiration: 86400000
+  refresh-token-expiration: 604800000
+
+logging:
+  level:
+    com.connectx.messaging: DEBUG
